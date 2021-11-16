@@ -9,7 +9,7 @@ const firebaseConfig = {
     projectId: "photo-gallery-21f99",
     storageBucket: "photo-gallery-21f99.appspot.com",
     messagingSenderId: "283791211916",
-    appId: "1:283791211916:web:689c19ee2a0a01b3822aa9"
+    appId: "1:283791211916:web:689c19ee2a0a01b3822aa9",
   };
 
   // Initialize Firebase

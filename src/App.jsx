@@ -2,6 +2,7 @@ import './App.css'
 import React from 'react'
 import Header from './components/Header'
 import AddTransaction from './components/AddTransaction'
+import OnlineAddTransaction from './components/OnlineAddTransactions'
 import TransactionList from './components/TransactionList'
 import { GlobalProvider } from './context/GlobalState'
 import Main from './components/Main'
@@ -15,7 +16,7 @@ const App = () => {
                     <Switch>
                         <Route path="/" exact component={Main} />
                         <Route path="/history" exact component={TransactionList} />
-                        <Route path='/transaction' exact component={AddTransaction} />
+                        <Route path='/transaction' exact component={OnlineAddTransaction} />
                     </Switch>
                 </div>
             </Router>

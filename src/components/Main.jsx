@@ -43,7 +43,6 @@ const Main = () => {
                     incomeCategoryGroup={incomeCategoryGroup}
                 />
             </div>
-
         </div >
     )
 }
