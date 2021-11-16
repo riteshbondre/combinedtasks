@@ -51,6 +51,7 @@ const AddTransaction = () => {
   //Adding New transaction
   const handleAddTransaction = (e) => {
     e.preventDefault();
+    
     history.push("/history");
     const newTranscation = {
       id: Math.floor(Math.random() * 1000000),
@@ -77,29 +78,60 @@ const AddTransaction = () => {
         console.log(blob);
         setImage(blob);
 
-        storageRef.put(blob)
-        .then((snap) => {
-          storageRef.getDownloadURL().then((url) => {
-            const createdAt = timestamp();
-            offlineStorage.add({
-              timestamp: createdAt,
-              text: text,
-              imageUrl: url,
-              name: name,
-              amount: amount,
-              date: date,
-            });
-            if(index === transactions.length-1){
-              localStorage.removeItem("state");
-            }
-            setUrl(url);
-            setAmount(0);
-            setText("");
-            setCategory("");
-            setImage(null);
-            setDate("");
-          });
-        })
+        storageRef.put(blob).then((snapshot) => {
+          storageRef
+          // .child(image.name)
+          .getDownloadURL()
+          .then (url => {
+              offlineStorage.add({
+                  timestamp: timestamp(),
+                  text,
+                  name,
+                  amount: +amount,
+                  date,
+                  imageUrl : url,
+              })
+              if(index === transactions.length-1){
+                      localStorage.removeItem("state");
+                    }
+          
+         
+          setImage("");
+          setAmount(0);
+      setText("");
+      setDate("");
+      })
+      },
+      (error) => {
+          console.log(error);
+          alert(error.message);
+      },)   
+      
+    
+
+        // storageRef.put(blob)
+        // .then((snap) => {
+        //   storageRef.getDownloadURL().then((url) => {
+        //     const createdAt = timestamp();
+        //     offlineStorage.add({
+        //       timestamp: createdAt,
+        //       text: text,
+        //       imageUrl: url,
+        //       name: name,
+        //       amount: amount,
+        //       date: date,
+        //     });
+        //     if(index === transactions.length-1){
+        //       localStorage.removeItem("state");
+        //     }
+        //     setUrl(url);
+        //     setAmount(0);
+        //     setText("");
+        //     setCategory("");
+        //     setImage(null);
+        //     setDate("");
+        //   });
+        // })
           
         
         // offlineStorage.add({
@@ -132,8 +164,8 @@ const AddTransaction = () => {
 
     console.log(new Date(event.timeStamp));
   };
-  // window.removeEventListener("online", handleConnectionChange);
-  // window.addEventListener("online", handleConnectionChange);
+  window.removeEventListener("online", handleConnectionChange);
+  window.addEventListener("online", handleConnectionChange);
 
   return (
     <div className="add-transaction">
@@ -197,7 +229,7 @@ const AddTransaction = () => {
           <div className="d-grid">
             <button
               type="submit"
-              onClick={handleConnectionChange}
+              onClick={handleAddTransaction}
               className="btn"
             >
               Add transaction
@@ -205,7 +237,6 @@ const AddTransaction = () => {
           </div>
         </form>
       </div>
-      <ImageUpload/>
     </div>
     
   );
