@@ -8,6 +8,7 @@ import {
 } from "../firebase/config";
 
 const OnlineAddTransaction = () =>{
+    const history = useHistory()
   const [text, setText] = useState("");
   const [date, setDate] = useState("");
   const [name, setName] = useState("personal");
@@ -27,6 +28,7 @@ const OnlineAddTransaction = () =>{
     }
 
     const handleAddTransaction = (e) => {
+        history.push("/history");
         e.preventDefault();
         console.log(text,name,amount,image,date)
     storageRef.put(image).then((snapshot) => {
@@ -39,7 +41,7 @@ const OnlineAddTransaction = () =>{
                 text,
                 name,
                 amount: +amount,
-                
+                date,
                 imageUrl : url,
             })
         

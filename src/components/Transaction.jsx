@@ -11,7 +11,7 @@ const Transaction = ({ transaction }) => {
             <span>{transaction.date} </span> 
             <span>{transaction.text}</span> 
              {transaction.name} <span>{sign}${Math.abs(transaction.amount)}</span>
-             <span><img src={transaction.image} alt="img" /></span>
+             <span><img src={transaction.imageUrl} alt="img" /></span>
             <button onClick={() => deleteTransaction(transaction.id)} className="delete-btn">x</button>
         </li>
     )
