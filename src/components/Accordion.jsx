@@ -13,7 +13,7 @@ const Accordion = () => {
     // Grouping same date Data
     const allTransactionsArray = dateGrouping(transactions)
     const onlineTransactionArray = dateGrouping(docs);
-    console.log(onlineTransactionArray)
+    // console.log(onlineTransactionArray)
     // console.log(allTransactionsArray)
 
 

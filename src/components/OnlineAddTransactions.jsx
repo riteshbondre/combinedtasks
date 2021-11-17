@@ -7,7 +7,7 @@ import {
   timestamp,
 } from "../firebase/config";
 
-const OnlineAddTransaction = () =>{
+const OnlineAddTransaction = ({handlecount}) =>{
     const history = useHistory()
   const [text, setText] = useState("");
   const [date, setDate] = useState("");
@@ -15,6 +15,7 @@ const OnlineAddTransaction = () =>{
   const [amount, setAmount] = useState(0);
   const [finalImg, setFinalImg] = useState("");
   const [image, setImage] = useState("");
+  const[count,setCount]=useState(0);
   const offlineStorage = projectFirestore.collection("transactions");
     const storageRef = projectStorage.ref(
       "blobtransaction" + Math.floor(Date.now() / 1000)
@@ -28,34 +29,52 @@ const OnlineAddTransaction = () =>{
     }
 
     const handleAddTransaction = (e) => {
+     handlecount(amount)
+
         history.push("/history");
         e.preventDefault();
-        console.log(text,name,amount,image,date)
-    storageRef.put(image).then((snapshot) => {
-        storageRef
-        // .child(image.name)
-        .getDownloadURL()
-        .then (url => {
-            offlineStorage.add({
-                timestamp: timestamp(),
-                text,
-                name,
-                amount: +amount,
-                date,
-                imageUrl : url,
-            })
+      
+        if(image){
+          storageRef.put(image).then((snapshot) => {
+            storageRef
+            // .child(image.name)
+            .getDownloadURL()
+            .then (url => {
+                offlineStorage.add({
+                    timestamp: timestamp(),
+                    text,
+                    name,
+                    amount: +amount,
+                    date,
+                    imageUrl : url,
+                })
+            
+                
+            setImage("");
+            setAmount(0);
+        setText("");
+        setDate("");
+        })
+        },
         
-       
-        setImage("");
-        setAmount(0);
-    setText("");
-    setDate("");
-    })
-    },
-    (error) => {
-        console.log(error);
-        alert(error.message);
-    },)   
+        (error) => {
+            console.log(error);
+            alert(error.message);
+        },)  
+      }
+
+        else if(!image){
+          offlineStorage.add({
+            timestamp: timestamp(),
+            text,
+            name,
+            amount: +amount,
+            date,
+        })
+        }
+        
+        
+        
     }
 
     return(

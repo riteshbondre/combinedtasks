@@ -3,15 +3,16 @@ import { GlobalContext } from '../context/GlobalState'
 import { categoryGrouping, dateGrouping } from '../helper/reUsableFunctions'
 import Balance from './Balance'
 import ChartCard from './pi-charts/ChartCard'
+import useFirestore from '../hooks/useFirestore';
+import { calcIncome,clacAmount } from '../helper/reUsableFunctions'
 
 
 const Main = () => {
-    const { transactions } = useContext(GlobalContext);
-
+   const {transactions} = useContext(GlobalContext)
     // Separating Income and Expenses
     let income = [];
     let expense = [];
-    for (let i = 0; i < transactions.length; i++) {
+    for (let i = 0; i < transactions?.length; i++) {
         if (transactions[i].amount < 0) {
             let temp = JSON.parse(JSON.stringify(transactions[i]));
             temp.amount = -1 * transactions[i].amount

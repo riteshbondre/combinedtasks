@@ -25,8 +25,10 @@ const AddTransaction = () => {
   const storageRef = projectStorage.ref(
     "blobtransaction" + Math.floor(Date.now() / 1000)
   );
-    let transactionStore = transactions
-    console.log(transactionStore)
+
+  const offlinetranscations = transactions
+  console.log(offlinetranscations)
+  
   const convertBase64 = (selected) => {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -66,18 +68,24 @@ const AddTransaction = () => {
     setText("");
     setDate("");
     setFinalImg("");
+    
   };
 
+  const extractArray = (arr) => {
+    for (var index = 0; index < arr.length; index++) {
+      const trimmedBaseString = arr[index].image.split(",").pop();
+      blob = base64StringToBlob(trimmedBaseString, "image/jpeg");
+      console.log(blob);
+      setImage(blob);
+  }
+}
+
   const handleConnectionChange = async (event) => {
-    //if (event.type == "online") {
+    if (event.type == "online") {
       console.log("You are now back online.");
       // console.log(transactions.length);
-      for (var index = 0; index < transactions.length; index++) {
-        const trimmedBaseString = transactions[index].image.split(",").pop();
-        blob = base64StringToBlob(trimmedBaseString, "image/jpeg");
-        console.log(blob);
-        setImage(blob);
-
+     
+      extractArray(offlinetranscations)
         storageRef.put(blob).then((snapshot) => {
           storageRef
           // .child(image.name)
@@ -91,9 +99,7 @@ const AddTransaction = () => {
                   date,
                   imageUrl : url,
               })
-              if(index === transactions.length-1){
-                      localStorage.removeItem("state");
-                    }
+             
           
          
           setImage("");
@@ -107,7 +113,9 @@ const AddTransaction = () => {
           alert(error.message);
       },)   
       
-    
+      // if(index === transactions.length){
+      //   localStorage.removeItem("state");
+      // }
 
         // storageRef.put(blob)
         // .then((snap) => {
@@ -157,10 +165,10 @@ const AddTransaction = () => {
         //     });
         //   }
         // );
-      }
+     
 
-      //localStorage.removeItem("state");
-    //}
+       localStorage.removeItem("state");
+    }
 
     console.log(new Date(event.timeStamp));
   };

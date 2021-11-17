@@ -1,8 +1,17 @@
 import React, { useContext } from 'react'
 import { GlobalContext } from '../context/GlobalState'
+import { projectFirestore, projectStorage } from '../firebase/config'
 const Transaction = ({ transaction }) => {
-    const { deleteTransaction } = useContext(GlobalContext);
+    // const { deleteTransaction } = useContext(GlobalContext);
+    const deleteTransaction = async (id, url) => {
 
+        let pictureRef = projectStorage.refFromURL(url);
+
+        await pictureRef.delete()
+
+        await projectFirestore.collection('transactions').doc(id).delete();
+        console.log("deleted??")
+    }
     // list item style
     const sign = transaction.amount < 0 ? '-' : '+'
     const className = transaction.amount < 0 ? 'minus' : 'plus'
@@ -12,7 +21,7 @@ const Transaction = ({ transaction }) => {
             <span>{transaction.text}</span> 
              {transaction.name} <span>{sign}${Math.abs(transaction.amount)}</span>
              <span><img src={transaction.imageUrl} alt="img" /></span>
-            <button onClick={() => deleteTransaction(transaction.id)} className="delete-btn">x</button>
+            <button onClick={() => deleteTransaction(transaction.id,transaction.imageUrl)} className="delete-btn">x</button>
         </li>
     )
 }

@@ -38,7 +38,7 @@ export const individualCategoryTotal = (arr) => {
 // Grouping based on category
 let categoryGroupsArray;
 export const categoryGrouping = (arr) => {
-  const categoryGroup = arr.reduce((categoryGroup, item) => {
+  const categoryGroup = arr?.reduce((categoryGroup, item) => {
     const name = item.name.split("T")[0];
     if (!categoryGroup[name]) {
       categoryGroup[name] = [];
@@ -61,7 +61,7 @@ export const categoryGrouping = (arr) => {
 // Grouping based on date
 let dateGroupsArray;
 export const dateGrouping = (arr) => {
-  const dateGroup = arr.reduce((dateGroup, item) => {
+  const dateGroup = arr?.reduce((dateGroup, item) => {
     const date = item.date.split("T")[0];
     if (!dateGroup[date]) {
       dateGroup[date] = [];
@@ -92,7 +92,7 @@ export const dateGrouping = (arr) => {
 // (YESTERDAY COMPONENT )
 let temp = [];
 export const filterDataBasedOnDate = (arr, date) => {
-  for (let i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr?.length; i++) {
     if (arr[i].date === date) {
       temp = arr[i].items;
     }
@@ -103,7 +103,7 @@ export const filterDataBasedOnDate = (arr, date) => {
 // (LAST MONTH COMPONENT )
 export const filterDataBasedOnDates = (arr) => {
   let temp = [];
-  for (let i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr?.length; i++) {
     for (let j = 0; j < arr[i].items.length; j++) {
       if (
         arr[i].items[j].date >= firstDate &&
@@ -119,7 +119,7 @@ export const filterDataBasedOnDates = (arr) => {
 // Calculating the Income and Expense
 let amount;
 export const clacAmount = (arr) => {
-  amount = arr.map((transaction) => transaction.amount);
+  amount = arr?.map((transaction) => transaction.amount);
   return amount;
 };
 export const calcExpenses = (amount) => {
@@ -130,13 +130,12 @@ export const calcExpenses = (amount) => {
 };
 export const calAllExpenses = (amount) => {
   return (
-    amount.filter((item) => item < 0).reduce((acc, item) => (acc += item), 0) *
+    amount?.filter((item) => item < 0).reduce((acc, item) => (acc += item), 0) *
     -1
   ).toFixed(2);
 };
 export const calcIncome = (amount) => {
-  return amount
-    .filter((item) => item > 0)
+  return amount?.filter((item) => item > 0)
     .reduce((acc, item) => (acc += item), 0)
     .toFixed(2);
 };
