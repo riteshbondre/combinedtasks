@@ -5,6 +5,7 @@ import { calcIncome,clacAmount } from '../helper/reUsableFunctions'
 
 const Header = ({abc}) => {
     console.log(abc)
+    const connected=navigator.onLine
     const [count, setCount] = useState(0)
     const { docs } = useFirestore('transactions');
     // console.log(docs)
@@ -30,7 +31,7 @@ const Header = ({abc}) => {
                     </a>
                 </Link>
                 {
-                    abc >= 1000 && (
+                    (abc >= 1000 && connected) && (
                         <Link to="/hangman" >
                     <a className=" item" href="$">
                         Play Game

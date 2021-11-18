@@ -20,11 +20,13 @@ const AddTransaction = () => {
   const [amount, setAmount] = useState(0);
   const [finalImg, setFinalImg] = useState("");
   const [image, setImage] = useState("");
+  const [error, setError] = useState(null);
   const [url, setUrl] = useState(null);
   const offlineStorage = projectFirestore.collection("transactions");
   const storageRef = projectStorage.ref(
     "blobtransaction" + Math.floor(Date.now() / 1000)
   );
+  const types = ["image/png", "image/jpeg"];
 
   const convertBase64 = (selected) => {
     return new Promise((resolve, reject) => {
@@ -43,11 +45,18 @@ const AddTransaction = () => {
   };
 
   const onImageUpload = async (e) => {
-   
     if (e.target.files.length > 0) {
       const selected = e.target.files[0];
-      const base64 = await convertBase64(selected);
-      setImage(base64);
+
+      // setImage(base64);
+      if (selected && types.includes(selected.type)) {
+        const base64 = await convertBase64(selected);
+        setImage(base64);
+        setError("");
+      } else {
+        setImage(null);
+        setError("Please select an image file (png or jpg)");
+      }
     }
   };
   //Adding New transaction
@@ -78,23 +87,23 @@ const AddTransaction = () => {
           <div className="form-control">
             <label htmlFor="text">Text</label>
             <input
+              required
               type="text"
               ref={input}
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Enter text..."
-              required
             />
           </div>
           <div className="form-control">
             <label htmlFor="date">Date</label>
             <input
+              required
               type="date"
               value={date}
               max={maxDate}
               onChange={(e) => setDate(e.target.value)}
               placeholder="Select Date"
-              required
             />
           </div>
           <div className="form-control">
@@ -115,11 +124,11 @@ const AddTransaction = () => {
               (negative - expense, positive - income)
             </label>
             <input
+              required
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="Enter amount..."
-              required
             />
           </div>
           <div className="form-control">
@@ -128,7 +137,9 @@ const AddTransaction = () => {
               <br />
             </label>
             <input type="file" onChange={onImageUpload} />
+            {error && <div className="error">{error}</div>}
           </div>
+
           <div className="d-grid">
             <button
               type="submit"

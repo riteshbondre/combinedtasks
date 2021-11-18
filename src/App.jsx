@@ -95,7 +95,7 @@ const App = () => {
 
               {
 
-                count >= 1000 ? <HangmanHomePage /> : <Main />
+                count >= 1000 && connected ? <HangmanHomePage /> : <Main />
 
               }</Route>
             <Route path="/history" exact component={TransactionList} />

@@ -14,19 +14,32 @@ const OnlineAddTransaction = ({handlecount}) =>{
   const [name, setName] = useState("personal");
   const [amount, setAmount] = useState(0);
   const [finalImg, setFinalImg] = useState("");
+  const [error, setError] = useState(null);
   const [image, setImage] = useState("");
   const[count,setCount]=useState(0);
   const offlineStorage = projectFirestore.collection("transactions");
     const storageRef = projectStorage.ref(
       "blobtransaction" + Math.floor(Date.now() / 1000)
     );
+    const types = ["image/png", "image/jpeg"];
 
     
     const onImageUpload = (e) => {
-        if(e.target.files[0]){
-            setImage(e.target.files[0])
+      if (e.target.files.length > 0) {
+        const selected = e.target.files[0];
+  
+        // setImage(base64);
+        if (selected && types.includes(selected.type)) {
+         
+          setImage(selected);
+          setError("");
+        } else {
+          setImage(null);
+          setError("Please select an image file (png or jpg)");
         }
-    }
+      }
+    };
+    
 
     const handleAddTransaction = (e) => {
      handlecount(amount)
@@ -111,6 +124,7 @@ const OnlineAddTransaction = ({handlecount}) =>{
               value={name}
               onChange={(e) => setName(e.target.value)}
               id="category"
+              required
             >
               <option value="personal">Personal</option>
               <option value="travel">Travel</option>
@@ -136,6 +150,8 @@ const OnlineAddTransaction = ({handlecount}) =>{
               <br />
             </label>
             <input type="file" onChange={onImageUpload} />
+            {error && <div className="error">{error}</div>}
+
           </div>
           <div className="d-grid">
             <button
