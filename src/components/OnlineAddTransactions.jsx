@@ -77,6 +77,8 @@ const OnlineAddTransaction = ({handlecount}) =>{
         
     }
 
+    
+
     return(
         <div className="add-transaction">
       <div className="row">

@@ -26,12 +26,10 @@ const AddTransaction = () => {
     "blobtransaction" + Math.floor(Date.now() / 1000)
   );
 
-  const offlinetranscations = transactions
-  console.log(offlinetranscations)
-  
   const convertBase64 = (selected) => {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
+
       fileReader.readAsDataURL(selected);
 
       fileReader.onload = () => {
@@ -45,16 +43,18 @@ const AddTransaction = () => {
   };
 
   const onImageUpload = async (e) => {
-    const selected = e.target.files[0];
-    const base64 = await convertBase64(selected);
-
-    setImage(base64);
+   
+    if (e.target.files.length > 0) {
+      const selected = e.target.files[0];
+      const base64 = await convertBase64(selected);
+      setImage(base64);
+    }
   };
   //Adding New transaction
   const handleAddTransaction = (e) => {
     e.preventDefault();
-    
-    history.push("/history");
+
+    // history.push("/history");
     const newTranscation = {
       id: Math.floor(Math.random() * 1000000),
       text,
@@ -68,112 +68,7 @@ const AddTransaction = () => {
     setText("");
     setDate("");
     setFinalImg("");
-    
   };
-
-  const extractArray = (arr) => {
-    for (var index = 0; index < arr.length; index++) {
-      const trimmedBaseString = arr[index].image.split(",").pop();
-      blob = base64StringToBlob(trimmedBaseString, "image/jpeg");
-      console.log(blob);
-      setImage(blob);
-  }
-}
-
-  const handleConnectionChange = async (event) => {
-    if (event.type == "online") {
-      console.log("You are now back online.");
-      // console.log(transactions.length);
-     
-      extractArray(offlinetranscations)
-        storageRef.put(blob).then((snapshot) => {
-          storageRef
-          // .child(image.name)
-          .getDownloadURL()
-          .then (url => {
-              offlineStorage.add({
-                  timestamp: timestamp(),
-                  text,
-                  name,
-                  amount: +amount,
-                  date,
-                  imageUrl : url,
-              })
-             
-          
-         
-          setImage("");
-          setAmount(0);
-      setText("");
-      setDate("");
-      })
-      },
-      (error) => {
-          console.log(error);
-          alert(error.message);
-      },)   
-      
-      // if(index === transactions.length){
-      //   localStorage.removeItem("state");
-      // }
-
-        // storageRef.put(blob)
-        // .then((snap) => {
-        //   storageRef.getDownloadURL().then((url) => {
-        //     const createdAt = timestamp();
-        //     offlineStorage.add({
-        //       timestamp: createdAt,
-        //       text: text,
-        //       imageUrl: url,
-        //       name: name,
-        //       amount: amount,
-        //       date: date,
-        //     });
-        //     if(index === transactions.length-1){
-        //       localStorage.removeItem("state");
-        //     }
-        //     setUrl(url);
-        //     setAmount(0);
-        //     setText("");
-        //     setCategory("");
-        //     setImage(null);
-        //     setDate("");
-        //   });
-        // })
-          
-        
-        // offlineStorage.add({
-        //     name: name, text:text,
-        //     amount: amount,
-        //     date:date,
-        //     image:image });
-
-        // if (blob == null) return;
-        // offlineStorage.push(transactions[index]);
-        // storageRef.put(transactions[index]).then(
-
-        //   (snap) => {
-        //     console.log(transactions[index])
-        //     storageRef.getDownloadURL().then((url) => {
-        //       const createdAt = timestamp();
-        //       offlineStorage.add({ id:  Math.floor(Math.random() * 1000000),
-        //         name: name, createdAt,text,
-        //         amount: amount,
-        //         date:date,
-        //         image:url });
-        //       setUrl(url);
-        //     });
-        //   }
-        // );
-     
-
-       localStorage.removeItem("state");
-    }
-
-    console.log(new Date(event.timeStamp));
-  };
-  window.removeEventListener("online", handleConnectionChange);
-  window.addEventListener("online", handleConnectionChange);
 
   return (
     <div className="add-transaction">
@@ -246,7 +141,6 @@ const AddTransaction = () => {
         </form>
       </div>
     </div>
-    
   );
 };
 

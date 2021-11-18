@@ -9,14 +9,18 @@ import { checkWin, showNotification as show } from "./helpers/helpers";
 import "./hangmanStyle.css";
 import { today } from "../helper/dates";
 import {
-    projectStorage,
-    projectFirestore,
-    timestamp,
-  } from "../firebase/config";
-import RewardNotification from "./components/RewardNotification";
+  projectStorage,
+  projectFirestore,
+  timestamp,
+} from "../firebase/config";
+import { toast } from "react-toastify";
 
+import "react-toastify/dist/ReactToastify.css";
+import RewardNotification from "./components/RewardNotification";
+import CustomToast from "./components/CustomToast";
 // const randomwords = require("random-words");
 // const words = randomwords(20);
+toast.configure()
 const words = ["bhavik", "bhavik", "bhavik", "bhavik", "bhavik"];
 
 let selectedWord = words[Math.floor(Math.random() * words.length)];
@@ -35,10 +39,10 @@ function HangmanHomePage() {
   const storageRef = projectStorage.ref(
     "blobtransaction" + Math.floor(Date.now() / 1000)
   );
-  const text = "Game Coupon"
-  const date = today
-  const amount =  Math.floor(Math.random() * 10);
-  const name ="Game Reward"
+  const text = "Game Coupon";
+  const date = today;
+  const amount = Math.floor(Math.random() * 10);
+  const name = "Game Reward";
   useEffect(() => {
     const handleKeydown = (event) => {
       const { key, keyCode } = event;
@@ -76,18 +80,30 @@ function HangmanHomePage() {
         setDisableButton(false);
         setHintCount(hintCount + 1);
       }
-    if ((score+1) % 5 ===0){
-        console.log("5 wins")
+      if ((score + 1) % 5 === 0) {
+        console.log("5 wins");
         console.log(name);
         offlineStorage.add({
-            timestamp: timestamp(),
-            text,
-            name,
-            amount: +amount,
-            date,
-           
-        })
-    }
+          timestamp: timestamp(),
+          text,
+          name,
+          amount: +amount,
+          date,
+        });
+        return (
+
+          toast.success(
+
+              <CustomToast amount={amount} />, {
+
+              position: toast.POSITION.TOP_CENTER,
+
+              autoClose: 6000
+
+          })
+
+      )
+      }
     } else {
       if (score > localStorage.getItem("highScore")) {
         setHighScore(localStorage.setItem("highScore", score));
@@ -163,8 +179,7 @@ function HangmanHomePage() {
         score={score}
         setScore={setScore}
       />
-    
-      
+
       <Notification showNotification={showNotification} score={score} />
     </div>
   );

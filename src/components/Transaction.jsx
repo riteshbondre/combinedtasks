@@ -5,11 +5,10 @@ const Transaction = ({ transaction }) => {
     // const { deleteTransaction } = useContext(GlobalContext);
     const deleteTransaction = async (id, url) => {
 
+        await projectFirestore.collection('transactions').doc(id).delete();
         let pictureRef = projectStorage.refFromURL(url);
 
         await pictureRef.delete()
-
-        await projectFirestore.collection('transactions').doc(id).delete();
         console.log("deleted??")
     }
     // list item style
