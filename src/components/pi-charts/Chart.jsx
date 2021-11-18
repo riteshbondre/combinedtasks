@@ -2,13 +2,16 @@ import React, { useContext } from 'react'
 import { PieChart, Pie, Tooltip, Cell } from 'recharts';
 import { COLORS, renderCustomizedLabel, calAllExpenses, calcIncome, clacAmount } from '../../helper/reUsableFunctions'
 import { GlobalContext } from '../../context/GlobalState'
+import useFirestore from '../../hooks/useFirestore';
 
 const Chart = ({ expensesCategoryGroup }) => {
     const { transactions } = useContext(GlobalContext)
+   const{docs} = useFirestore('transactions');
+
 
     // Calculating the Income and Expense
-    const Income = calcIncome(clacAmount(transactions));
-    const Expense = calAllExpenses(clacAmount(transactions))
+    const Income = calcIncome(clacAmount(docs));
+    const Expense = calAllExpenses(clacAmount(docs))
 
     return (
         <div>

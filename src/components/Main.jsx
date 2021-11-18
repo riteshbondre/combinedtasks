@@ -9,18 +9,22 @@ import { calcIncome,clacAmount } from '../helper/reUsableFunctions'
 
 const Main = () => {
    const {transactions} = useContext(GlobalContext)
+   const{docs} = useFirestore('transactions');
     // Separating Income and Expenses
     let income = [];
     let expense = [];
-    for (let i = 0; i < transactions?.length; i++) {
-        if (transactions[i].amount < 0) {
-            let temp = JSON.parse(JSON.stringify(transactions[i]));
-            temp.amount = -1 * transactions[i].amount
-            expense.push(temp)
-        } else {
-            income.push(transactions[i])
+    const calcIncomeAndExpenseArray =(arr)=>{
+        for (let i = 0; i < arr?.length; i++) {
+            if (arr[i].amount < 0) {
+                let temp = JSON.parse(JSON.stringify(arr[i]));
+                temp.amount = -1 * arr[i].amount
+                expense.push(temp)
+            } else {
+                income.push(arr[i])
+            }
         }
     }
+ calcIncomeAndExpenseArray(docs)
 
     // Grouping same category data
     const incomeCategoryGroup = categoryGrouping(income);
